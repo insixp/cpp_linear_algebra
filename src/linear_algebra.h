@@ -89,7 +89,7 @@ class MATRIX
             }
 
 
-            //  Setting 
+            //  Setting tmp vector
             for(int i = matrix_prop.height; i < matrix_prop.height + matrix_in.y_index; i++){
                 vector<MATRIX_TYPE>     curr_vec(this->matrix[i].begin() + (matrix_in.x_index), this->matrix[i].begin() + (matrix_in.x_index + matrix_prop.width));
                 res_matrix[i]           = curr_vec;
