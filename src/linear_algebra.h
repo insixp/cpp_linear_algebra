@@ -24,19 +24,6 @@ class MATRIX
         const matrix_propetries             matrix_prop;
         vector<vector<MATRIX_TYPE>>         matrix;
 
-        vector<MATRIX_TYPE>  get_matrix_row(int index){
-            vector<MATRIX_TYPE>     res_vector;
-            res_vector.resize(this->matrix_prop.width);
-            for(int i = 0; i < this->matrix_prop.width; i++){
-                res_vector[i]       = this->matrix[i][index];
-            }
-            return res_vector;
-        }
-
-        vector<MATRIX_TYPE>  get_matrix_col(int index){
-            return this->matrix[index];
-        }
-
     public:
 
         //  Constructor
