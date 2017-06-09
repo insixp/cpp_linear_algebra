@@ -4,6 +4,6 @@
     "version": "0.1.0",
     "command": "g++",
     "isShellCommand": true,
-    "args": ["C:/Users/Tal/Desktop/Study/cpp_linear_algebra/tb/main.cpp", "-o", "res.exe", "-std=c++11"],
+    "args": ["${workspaceRoot}/tb/main.cpp", "-o", "res.exe", "-std=c++11"],
     "showOutput": "always"
 }
