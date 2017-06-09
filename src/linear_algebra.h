@@ -157,4 +157,20 @@ class MATRIX
             }
             return res_matrix;
         }
+
+        MATRIX operator*(MATRIX matrix_b) {
+            matrix_propetries matrix_b_prop     = matrix_b.get_matrix_propetries();
+            if(matrix_b_prop.height != this->matrix_prop.width){
+                throw BAD_MATRIX_SIZE_EXCEPTION;
+            }
+            MATRIX     res_matrix(matrix_b_prop.width, this->matrix_prop.height);
+            for(int i = 0; i < this->matrix_prop.height; i++){
+                for(int j = 0; j < matrix_b_prop.width; j++){
+                    for(int k = 0; k < this->matrix_prop.width; k++){
+                        res_matrix[i][j]    += this->matrix[i][k] * matrix_b[k][j];
+                    }
+                }
+            }
+            return res_matrix;
+        }
 };
