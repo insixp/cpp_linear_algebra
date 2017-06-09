@@ -15,8 +15,34 @@ typedef struct {
     int     y_index;
 }   matrix_index;
 
-//  Function decleration
-bool linear_independence (vector<VECTOR_TYPE> vector_a, vector<VECTOR_TYPE> vector_b);
+//  Functions
+template <class VECTOR_TYPE>
+bool linear_dependence (vector<VECTOR_TYPE> vector_a, vector<VECTOR_TYPE> vector_b){
+    if(vector_a.size() != vector_b.size())
+        throw BAD_MATRIX_SIZE_EXCEPTION;
+    float   lambda  = vector_a[0]   / vector_b[0];
+    for(int i = 1; i < vector_a.size(); i++){
+        if(!vector_a[i] || !vector_b[i]){
+            if(vector_a[i] != vector_b[i])
+                return false;
+        } else {
+            if(vector_a[i] / vector_b[i]    != lambda)
+                return false;
+        }
+    }
+    return true;
+}
+
+template <class VECTOR_TYPE>
+bool orthogonal (vector<VECTOR_TYPE> vector_a, vector<VECTOR_TYPE> vector_b){
+    if(vector_a.size() != vector_b.size())
+        throw BAD_MATRIX_SIZE_EXCEPTION;
+    float   inner_product   = 0;
+    for(int i = 0; i < vector_a.size(); i++){
+            inner_product   += vector_a[i] * vector_b[i];
+    }
+    return inner_product == 0;
+}
 
 //  Class
 template <class MATRIX_TYPE>
@@ -93,13 +119,16 @@ class MATRIX
         }
 
         int     rank(){
+            vector<vector<MATRIX_TYPE>>     tmp_matrix  = this->matrix;
             int rank    = 0;
-            for(int i = 0; i < this->matrix_prop.height; i++){
-                for(int j = i+1; j < this->matrix_prop.height; j++){
-                    if(linear_independence(this->matrix[i], this->matrix[j])){
-                        rank++;
+            for(int i = 0; i < this->matrix.size(); i++){
+                for(int j = i+1; j < this->matrix.size(); j++){
+                    if(linear_dependence(this->matrix[i], this->matrix[j])){
+                        goto focused_vec_itr;
                     }
                 }
+                rank++;
+                focused_vec_itr:;
             }
             return rank;
         }
@@ -143,8 +172,24 @@ class MATRIX
             return this->matrix[index];
         }
 
+        MATRIX  base(bool orthogonal){
+            vector<vector<MATRIX_TYPE>>     res_vector;
+            for(int i = 0; i < this->matrix.size(); i++){
+                for(int j = i+1; j < this->matrix.size(); j++){
+                    if(linear_dependence(this->matrix[i], this->matrix[j])){
+                        goto focused_vec_itr;
+                    }
+                }
+                res_vector.push_back(this->matrix[i]);
+                focused_vec_itr:;
+            }
+            if(!orthogonal){
+                MATRIX<MATRIX_TYPE>     res_matrix(res_vector);
+                return res_matrix;
+            }
+        }
+
         //  Matrix addition
-        // template<class MATRIX_T>
         MATRIX operator+(MATRIX matrix_b) {
             matrix_propetries matrix_b_prop     = matrix_b.get_matrix_propetries();
             if(matrix_b_prop.height != this->matrix_prop.height || matrix_b_prop.width != this->matrix_prop.width){
@@ -175,20 +220,3 @@ class MATRIX
             return res_matrix;
         }
 };
-
-template <class VECTOR_TYPE>
-bool linear_independence (vector<VECTOR_TYPE> vector_a, vector<VECTOR_TYPE> vector_b){
-    if(vector_a.size() != vector_b.size())
-        return false;
-    VECTOR_TYPE     lambda  = vector_a[0]   / vector_b[0];
-    for(int i = 1; i < vector_a.size(); i++){
-        if(vector_a[i] / vector_b[i]    != lambda)
-            return false;
-    }
-    return true;
-}
-
-template <class MATRIX_TYPE>
-MATRIX<MATRIX_TYPE> Diagonalize(MATRIX<MATRIX_TYPE> matrix_in, MATRIX<MATRIX_TYPE> *diagonalizing){
-    
-}
