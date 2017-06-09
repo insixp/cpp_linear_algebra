@@ -1,5 +1,6 @@
 #include <vector>
 #include <iostream>
+#include "errors.h"
 
 using namespace std;
 
@@ -37,8 +38,9 @@ class MATRIX
         }
 
     public:
-        MATRIX(const matrix_propetries matrix_prop) : matrix_prop(matrix_prop)
-        {
+
+        //  Constructor
+        MATRIX(const matrix_propetries matrix_prop) : matrix_prop(matrix_prop){
             //  Initiate matrix with zeros
             this->matrix.resize(this->matrix_prop.height);
             for(int i = 0; i < this->matrix_prop.height; i++){
@@ -46,8 +48,7 @@ class MATRIX
             }
         }
 
-        MATRIX(const int height, const int width) : matrix_prop({width, height})
-        {
+        MATRIX(const int width, const int height) : matrix_prop({height, width}){
             //  Initiate matrix with zeros
             this->matrix.resize(this->matrix_prop.height);
             for(int i = 0; i < this->matrix_prop.height; i++){
@@ -56,20 +57,20 @@ class MATRIX
         }
 
         //  Get functions
-
         matrix_propetries   get_matrix_propetries(){
             return this->matrix_prop;
         }
 
         void    print_matrix(){
+            cout << this->matrix[0][0] << endl;
             for(int i = 0; i < this->matrix_prop.height; i++){
-                for(typename vector<MATRIX_TYPE>::const_iterator j = this->matrix[i].begin(); j < this->matrix[i].end(); j++){
-                    if(j == this->matrix[i].begin())
+                for(int j = 0; j < this->matrix_prop.width; j++){
+                    if(j == 0)
                         cout << "[";
-                    if(j == this->matrix[i].end() - 1)
-                        cout << *j << "]";
+                    if(j == this->matrix_prop.width - 1)
+                        cout << this->matrix[i][j] << "]";
                     else
-                        cout << *j << ", ";
+                        cout << this->matrix[i][j] << ", ";
                 }
                 cout << endl;
             }
@@ -99,8 +100,27 @@ class MATRIX
         }
 
         //  Set functions
+        MATRIX operator=(const vector<vector<MATRIX_TYPE>> matrix_in){
+            if(matrix_in.size() != this->matrix_prop.height){
+                throw BAD_MATRIX_SIZE_EXCEPTION;
+            }
+            for(int i = 0; i < this->matrix_prop.height; i++){
+                if(matrix_in[i].size() != this->matrix_prop.width){
+                    throw BAD_MATRIX_SIZE_EXCEPTION;
+                }
+            }     
+            for(int i = 0; i < this->matrix_prop.height; i++){
+                for(int j = 0; j < this->matrix_prop.width; j++){
+                    this->matrix[i][j]     = matrix_in[i][j];
+                }
+            }
+            print_matrix();
+        }
 
-        void set_matrix_vectors(vector<vector<MATRIX_TYPE>> matrix_in){
-            this->matrix        = matrix_in;
+        //  Matrix addition
+        // template<class MATRIX_T>
+        MATRIX operator+(MATRIX &matrix_b) {
+            print_matrix();
+            return matrix_b;
         }
 };
