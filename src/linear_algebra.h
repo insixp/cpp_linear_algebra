@@ -15,7 +15,6 @@ typedef struct {
     int     y_index;
 }   matrix_index;
 
-
 //  Class
 template <class MATRIX_TYPE>
 class MATRIX
@@ -90,6 +89,10 @@ class MATRIX
             return res_matrix_class;
         }
 
+        int     rank(){
+
+        }
+
         void    print_matrix(){
             for(int i = 0; i < this->matrix_prop.height; i++){
                 for(int j = 0; j < this->matrix_prop.width; j++){
@@ -161,3 +164,20 @@ class MATRIX
             return res_matrix;
         }
 };
+
+template <class VECTOR_TYPE>
+bool linear_independence (vector<VECTOR_TYPE> vector_a, vector<VECTOR_TYPE> vector_b){
+    if(vector_a.size() != vector_b.size())
+        return false;
+    VECTOR_TYPE     lambda  = vector_a[0]   / vector_b[0];
+    for(int i = 1; i < vector_a.size(); i++){
+        if(vector_a[i] / vector_b[i]    != lambda)
+            return false;
+    }
+    return true;
+}
+
+template <class MATRIX_TYPE>
+MATRIX<MATRIX_TYPE> Diagonalize(MATRIX<MATRIX_TYPE> matrix_in, MATRIX<MATRIX_TYPE> *diagonalizing){
+
+}
