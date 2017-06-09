@@ -6,9 +6,10 @@ using namespace std;
 
 int main(){
 
-    vector<float>       a = {1,2,3,4,5};
-    vector<float>       b = {3,4,6,8,10};
-    cout << linear_independence(a, b) << endl;
+    MATRIX<float>   matrix_a({{1, 1}, {3, 1}});
+    MATRIX<float>   matrix_b({{2, 0, 2}, {0, 2, 2}});
+    // MATRIX<float>   c = matrix_a + matrix_b;
+    cout << matrix_a.rank() << endl;
 
     return 0;
 }

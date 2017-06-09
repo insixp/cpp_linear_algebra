@@ -15,6 +15,9 @@ typedef struct {
     int     y_index;
 }   matrix_index;
 
+//  Function decleration
+bool linear_independence (vector<VECTOR_TYPE> vector_a, vector<VECTOR_TYPE> vector_b);
+
 //  Class
 template <class MATRIX_TYPE>
 class MATRIX
@@ -90,7 +93,15 @@ class MATRIX
         }
 
         int     rank(){
-
+            int rank    = 0;
+            for(int i = 0; i < this->matrix_prop.height; i++){
+                for(int j = i+1; j < this->matrix_prop.height; j++){
+                    if(linear_independence(this->matrix[i], this->matrix[j])){
+                        rank++;
+                    }
+                }
+            }
+            return rank;
         }
 
         void    print_matrix(){
@@ -179,5 +190,5 @@ bool linear_independence (vector<VECTOR_TYPE> vector_a, vector<VECTOR_TYPE> vect
 
 template <class MATRIX_TYPE>
 MATRIX<MATRIX_TYPE> Diagonalize(MATRIX<MATRIX_TYPE> matrix_in, MATRIX<MATRIX_TYPE> *diagonalizing){
-
+    
 }
