@@ -40,6 +40,8 @@ class MATRIX
     public:
 
         //  Constructor
+        MATRIX();
+
         MATRIX(const matrix_propetries matrix_prop) : matrix_prop(matrix_prop){
             //  Initiate matrix with zeros
             this->matrix.resize(this->matrix_prop.height);
@@ -56,24 +58,26 @@ class MATRIX
             }
         }
 
+        MATRIX(const vector<vector<MATRIX_TYPE>>    matrix_in) : matrix_prop({matrix_in.size(), matrix_in[0].size()}){
+            //  Both checks are for when the matrix width is not the same so we check its the same.
+            if(matrix_in.size() != this->matrix_prop.height){
+                throw BAD_MATRIX_SIZE_EXCEPTION;
+            }
+            for(int i = 0; i < this->matrix_prop.height; i++){
+                if(matrix_in[i].size() != this->matrix_prop.width){
+                    throw BAD_MATRIX_SIZE_EXCEPTION;
+                }
+            }
+            this->matrix        = matrix_in;
+        }
+
         //  Get functions
         matrix_propetries   get_matrix_propetries(){
             return this->matrix_prop;
         }
 
-        void    print_matrix(){
-            cout << this->matrix[0][0] << endl;
-            for(int i = 0; i < this->matrix_prop.height; i++){
-                for(int j = 0; j < this->matrix_prop.width; j++){
-                    if(j == 0)
-                        cout << "[";
-                    if(j == this->matrix_prop.width - 1)
-                        cout << this->matrix[i][j] << "]";
-                    else
-                        cout << this->matrix[i][j] << ", ";
-                }
-                cout << endl;
-            }
+        MATRIX_TYPE get_index(matrix_index matrix_index){
+            return this->matrix[matrix_index.x_index][matrix_index.y_index];
         }
 
         MATRIX get_sub_matrix(matrix_propetries matrix_prop, matrix_index matrix_in){
@@ -99,8 +103,26 @@ class MATRIX
             return res_matrix_class;
         }
 
+        void    print_matrix(){
+            for(int i = 0; i < this->matrix_prop.height; i++){
+                for(int j = 0; j < this->matrix_prop.width; j++){
+                    if(j == 0)
+                        cout << "[";
+                    if(j == this->matrix_prop.width - 1)
+                        cout << this->matrix[i][j] << "]";
+                    else
+                        cout << this->matrix[i][j] << ", ";
+                }
+                cout << endl;
+            }
+        }
+
         //  Set functions
-        MATRIX operator=(const vector<vector<MATRIX_TYPE>> matrix_in){
+        void set_index(matrix_index matrix_index, MATRIX_TYPE value){
+            this->matrix[matrix_index.x_index][matrix_index.y_index]    = value;
+        }
+
+        void operator=(const vector<vector<MATRIX_TYPE>> matrix_in){
             if(matrix_in.size() != this->matrix_prop.height){
                 throw BAD_MATRIX_SIZE_EXCEPTION;
             }
@@ -114,13 +136,25 @@ class MATRIX
                     this->matrix[i][j]     = matrix_in[i][j];
                 }
             }
-            print_matrix();
+        }
+
+        vector<MATRIX_TYPE> &operator[](const int index){
+            return this->matrix[index];
         }
 
         //  Matrix addition
         // template<class MATRIX_T>
-        MATRIX operator+(MATRIX &matrix_b) {
-            print_matrix();
-            return matrix_b;
+        MATRIX operator+(MATRIX matrix_b) {
+            matrix_propetries matrix_b_prop     = matrix_b.get_matrix_propetries();
+            if(matrix_b_prop.height != this->matrix_prop.height || matrix_b_prop.width != this->matrix_prop.width){
+                throw BAD_MATRIX_SIZE_EXCEPTION;
+            }
+            MATRIX     res_matrix(this->matrix_prop.width, this->matrix_prop.height);
+            for(int i = 0; i < this->matrix_prop.height; i++){
+                for(int j = 0; j < this->matrix_prop.width; j++){
+                    res_matrix[i][j]    = matrix_b[i][j] + this->matrix[i][j];
+                }
+            }
+            return res_matrix;
         }
 };
