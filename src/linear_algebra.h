@@ -118,6 +118,23 @@ class MATRIX
             return res_matrix_class;
         }
 
+        MATRIX  base(bool orthogonal){
+            vector<vector<MATRIX_TYPE>>     res_vector;
+            for(int i = 0; i < this->matrix.size(); i++){
+                for(int j = i+1; j < this->matrix.size(); j++){
+                    if(linear_dependence(this->matrix[i], this->matrix[j])){
+                        goto focused_vec_itr;
+                    }
+                }
+                res_vector.push_back(this->matrix[i]);
+                focused_vec_itr:;
+            }
+            if(!orthogonal){
+                MATRIX<MATRIX_TYPE>     res_matrix(res_vector);
+                return res_matrix;
+            }
+        }
+
         int     rank(){
             vector<vector<MATRIX_TYPE>>     tmp_matrix  = this->matrix;
             int rank    = 0;
@@ -147,49 +164,7 @@ class MATRIX
             }
         }
 
-        //  Set functions
-        void set_index(matrix_index matrix_index, MATRIX_TYPE value){
-            this->matrix[matrix_index.x_index][matrix_index.y_index]    = value;
-        }
-
-        void operator=(const vector<vector<MATRIX_TYPE>> matrix_in){
-            if(matrix_in.size() != this->matrix_prop.height){
-                throw BAD_MATRIX_SIZE_EXCEPTION;
-            }
-            for(int i = 0; i < this->matrix_prop.height; i++){
-                if(matrix_in[i].size() != this->matrix_prop.width){
-                    throw BAD_MATRIX_SIZE_EXCEPTION;
-                }
-            }     
-            for(int i = 0; i < this->matrix_prop.height; i++){
-                for(int j = 0; j < this->matrix_prop.width; j++){
-                    this->matrix[i][j]     = matrix_in[i][j];
-                }
-            }
-        }
-
-        vector<MATRIX_TYPE> &operator[](const int index){
-            return this->matrix[index];
-        }
-
-        MATRIX  base(bool orthogonal){
-            vector<vector<MATRIX_TYPE>>     res_vector;
-            for(int i = 0; i < this->matrix.size(); i++){
-                for(int j = i+1; j < this->matrix.size(); j++){
-                    if(linear_dependence(this->matrix[i], this->matrix[j])){
-                        goto focused_vec_itr;
-                    }
-                }
-                res_vector.push_back(this->matrix[i]);
-                focused_vec_itr:;
-            }
-            if(!orthogonal){
-                MATRIX<MATRIX_TYPE>     res_matrix(res_vector);
-                return res_matrix;
-            }
-        }
-
-        //  Matrix addition
+        //  Matrix operators
         MATRIX operator+(MATRIX matrix_b) {
             matrix_propetries matrix_b_prop     = matrix_b.get_matrix_propetries();
             if(matrix_b_prop.height != this->matrix_prop.height || matrix_b_prop.width != this->matrix_prop.width){
@@ -218,5 +193,25 @@ class MATRIX
                 }
             }
             return res_matrix;
+        }
+
+        void  operator=(const vector<vector<MATRIX_TYPE>> matrix_in){
+            if(matrix_in.size() != this->matrix_prop.height){
+                throw BAD_MATRIX_SIZE_EXCEPTION;
+            }
+            for(int i = 0; i < this->matrix_prop.height; i++){
+                if(matrix_in[i].size() != this->matrix_prop.width){
+                    throw BAD_MATRIX_SIZE_EXCEPTION;
+                }
+            }     
+            for(int i = 0; i < this->matrix_prop.height; i++){
+                for(int j = 0; j < this->matrix_prop.width; j++){
+                    this->matrix[i][j]     = matrix_in[i][j];
+                }
+            }
+        }
+
+        vector<MATRIX_TYPE> &operator[](const int index){
+            return this->matrix[index];
         }
 };
