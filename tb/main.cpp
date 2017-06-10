@@ -6,9 +6,9 @@ using namespace std;
 
 int main(){
 
-    MATRIX<float>       matrix_a({{1, 0, 3}, {1, 0, 3}});
-    MATRIX<float>       a_base  = matrix_a.base(0);
-    a_base.print_matrix();
+    MATRIX<float>       matrix_a({{1, 2, 3}, {1, 1, 1}, {2, 3, 2}});
+
+    cout << fixed << setprecision(3) << matrix_a.base(1) << endl;
 
     return 0;
 }
