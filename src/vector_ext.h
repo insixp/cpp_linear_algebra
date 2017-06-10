@@ -50,8 +50,6 @@ VECTOR_TYPE   norm(vector<VECTOR_TYPE> vector_a){
 
 template <class VECTOR_TYPE>
 vector<VECTOR_TYPE> vector_projection(vector<VECTOR_TYPE> vector_a, vector<VECTOR_TYPE> vector_b){
-    vector<VECTOR_TYPE>    projection_vec;
-
     return ((inner_product(vector_b, vector_a)/(pow(norm(vector_a), 2))) *  vector_a);
 }
 
@@ -78,6 +76,28 @@ void operator-=(vector<VECTOR_TYPE> &vec_a, vector<VECTOR_TYPE> vec_b){
     for(int i = 0; i < vec_a.size(); i++){
         vec_a[i]    -= vec_b[i];
     }
+}
+
+template <class VECTOR_TYPE>
+bool operator==(vector<VECTOR_TYPE> vec_a, vector<VECTOR_TYPE> vec_b){
+    if(vec_a.size() != vec_b.size())
+        throw BAD_VECTOR_SIZE_EXCEPTION;
+    for(int i = 0; i < vec_a.size(); i++){
+        if(vec_a[i] != vec_b[i])
+            return false;
+    }
+    return true;
+}
+
+
+template <class VECTOR_TYPE, class SCALAR_TYPE>
+inline bool operator==(vector<VECTOR_TYPE> vec, SCALAR_TYPE scalar){
+    for(int i = 0; i < vec.size(); i++){
+        if(vec[i] != scalar){
+            return false;
+        }
+    }
+    return true;
 }
 
 template <class VECTOR_TYPE>
