@@ -7,8 +7,9 @@ using namespace std;
 int main(){
 
     MATRIX<float>       matrix_a({{2, 3, 2}, {1, 2, 3}, {2, 3, 2}});
+    cout << matrix_a << endl;
 
-    cout << fixed << setprecision(3) << matrix_a.base(1) << endl;
+    cout << matrix_a.lower_tringular() << endl;
 
     return 0;
 }

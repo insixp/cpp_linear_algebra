@@ -71,8 +71,24 @@ vector<VECTOR_TYPE> operator*(vector<VECTOR_TYPE> vec_a, SCALAR_TYPE scalar){
 }
 
 template <class VECTOR_TYPE>
+vector<VECTOR_TYPE> operator+(vector<VECTOR_TYPE> vec_a, vector<VECTOR_TYPE> vec_b){
+    if(vec_a.size() != vec_b.size())
+        throw BAD_VECTOR_SIZE_EXCEPTION;
+
+    vector<VECTOR_TYPE>     res_vec;
+    for(int i = 0; i < vec_a.size(); i++){
+        res_vec[i]    = vec_a[i] + vec_b[i];
+    }
+    return res_vec;
+}
+
+template<class VECTOR_TYPE>
+vector<VECTOR_TYPE> operator-(vector<VECTOR_TYPE> vec_a, vector<VECTOR_TYPE> vec_b){
+    return vec_a + (-1)*vec_b;
+}
+
+template <class VECTOR_TYPE>
 void operator-=(vector<VECTOR_TYPE> &vec_a, vector<VECTOR_TYPE> vec_b){
-    // vector<VECTOR_TYPE>     res_vec = vec_a;
     for(int i = 0; i < vec_a.size(); i++){
         vec_a[i]    -= vec_b[i];
     }

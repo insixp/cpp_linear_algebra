@@ -135,6 +135,47 @@ class MATRIX
             return this->matrix_prop.height;
         }
 
+        //  Actions
+
+        void transpose(){
+            MATRIX_TYPE     tmp_item;
+            for(int i = 0; i < this->matrix_prop.height; i++){
+                for(int j = 0; j < this->matrix_prop.width; j++){
+                    tmp_item = this->matrix[i][j];
+                    this->matrix[i][j]  = this->matrix[j][i];
+                    this->matrix[i][j]  = tmp_item;
+                }
+            }
+        }
+
+        MATRIX lower_tringular(){
+            vector<MATRIX_TYPE> dec_row;
+            MATRIX<MATRIX_TYPE> res_matrix(this->matrix);
+
+            for(int main_row = 0; main_row < this->matrix_prop.height-1; main_row++){
+                while(res_matrix[main_row][main_row] == 0){
+                    vector<MATRIX_TYPE>     tmp_vec;
+                    tmp_vec                     = res_matrix[main_row];
+                    res_matrix[main_row]        = res_matrix[main_row + 1];
+                    res_matrix[main_row + 1]    = tmp_vec;
+                }
+                res_matrix[main_row]  = (1.0/res_matrix[main_row][main_row])*(res_matrix[main_row]);
+                for(int curr_row = main_row + 1; curr_row < this->matrix_prop.height; curr_row++){
+                    dec_row                 = (res_matrix[curr_row][main_row])*(res_matrix[main_row]);
+                    res_matrix[curr_row]    -= dec_row;
+                }
+            }
+            return res_matrix;
+        }
+
+        MATRIX diagonalyze(){
+            if(this->matrix_prop.height != this->matrix_prop.width)
+                throw MATRIX_NOT_SQUARE;
+            if(this->matrix_prop.height != this->rank())
+                throw MATRNIX_NOT_DIAGONALYZABLE;
+            
+        }
+
         //  Matrix operators
         MATRIX operator+(MATRIX matrix_b) {
             matrix_propetries matrix_b_prop     = matrix_b.get_matrix_propetries();
@@ -166,7 +207,7 @@ class MATRIX
             return res_matrix;
         }
 
-        void  operator=(const vector<vector<MATRIX_TYPE>> matrix_in){
+        void  operator=(vector<vector<MATRIX_TYPE>> matrix_in) {
             if(matrix_in.size() != this->matrix_prop.height){
                 throw BAD_MATRIX_SIZE_EXCEPTION;
             }
@@ -184,7 +225,7 @@ class MATRIX
 
         vector<MATRIX_TYPE> &operator[](const int index){
             return this->matrix[index];
-        }
+        }        
 };
 
 template <class MATRIX_TYPE>
