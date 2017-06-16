@@ -6,10 +6,8 @@ using namespace std;
 
 int main(){
 
-    MATRIX<float>       matrix_a({{2, 3, 2}, {1, 2, 3}, {2, 3, 2}});
-    cout << matrix_a << endl;
-
-    cout << matrix_a.lower_tringular() << endl;
+    MATRIX<float>       matrix_a({{1, 1, 1}, {1, 1, 0}, {1, 0, 0}});
+    cout << matrix_a.diagonalyze() << endl;
 
     return 0;
 }

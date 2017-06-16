@@ -152,15 +152,43 @@ class MATRIX
             vector<MATRIX_TYPE> dec_row;
             MATRIX<MATRIX_TYPE> res_matrix(this->matrix);
 
-            for(int main_row = 0; main_row < this->matrix_prop.height-1; main_row++){
-                while(res_matrix[main_row][main_row] == 0){
-                    vector<MATRIX_TYPE>     tmp_vec;
-                    tmp_vec                     = res_matrix[main_row];
-                    res_matrix[main_row]        = res_matrix[main_row + 1];
-                    res_matrix[main_row + 1]    = tmp_vec;
+            for(int main_row = 0; main_row < this->matrix_prop.height - 1; main_row++){
+                for(int i = main_row; i < this->matrix_prop.height - 1; i++){
+                    if(res_matrix[main_row][main_row] == 0){
+                        vector<MATRIX_TYPE>     tmp_vec;
+                        tmp_vec                     = res_matrix[main_row];
+                        res_matrix[main_row]        = res_matrix[main_row + 1];
+                        res_matrix[main_row + 1]    = tmp_vec;
+                    } else {
+                        break;
+                    }
                 }
                 res_matrix[main_row]  = (1.0/res_matrix[main_row][main_row])*(res_matrix[main_row]);
                 for(int curr_row = main_row + 1; curr_row < this->matrix_prop.height; curr_row++){
+                    dec_row                 = (res_matrix[curr_row][main_row])*(res_matrix[main_row]);
+                    res_matrix[curr_row]    -= dec_row;
+                }
+            }
+            return res_matrix;
+        }
+
+        MATRIX upper_tringular(){
+            vector<MATRIX_TYPE> dec_row;
+            MATRIX<MATRIX_TYPE> res_matrix(this->matrix);
+
+            for(int main_row = this->matrix_prop.height - 1; main_row > 0; main_row--){
+                for(int i = main_row; i > 0; i--){
+                    if(res_matrix[main_row][main_row] == 0){
+                        vector<MATRIX_TYPE>     tmp_vec;
+                        tmp_vec                     = res_matrix[main_row];
+                        res_matrix[main_row]        = res_matrix[main_row - 1];
+                        res_matrix[main_row + 1]    = tmp_vec;
+                    } else {
+                        break;
+                    }
+                }
+                res_matrix[main_row]  = (1.0/res_matrix[main_row][main_row])*(res_matrix[main_row]);
+                for(int curr_row = main_row - 1; curr_row >= 0; curr_row--){
                     dec_row                 = (res_matrix[curr_row][main_row])*(res_matrix[main_row]);
                     res_matrix[curr_row]    -= dec_row;
                 }
@@ -173,7 +201,10 @@ class MATRIX
                 throw MATRIX_NOT_SQUARE;
             if(this->matrix_prop.height != this->rank())
                 throw MATRNIX_NOT_DIAGONALYZABLE;
-            
+
+            MATRIX<MATRIX_TYPE> res_matrix(this->matrix_prop);
+            res_matrix  = this->lower_tringular().upper_tringular();
+            return res_matrix; 
         }
 
         //  Matrix operators
@@ -220,6 +251,15 @@ class MATRIX
                 for(int j = 0; j < this->matrix_prop.width; j++){
                     this->matrix[i][j]     = matrix_in[i][j];
                 }
+            }
+        }
+
+        void    operator=(MATRIX matrix_in){
+            matrix_propetries       matrix_in_prop   = matrix_in.get_matrix_propetries();
+            if(this->matrix_prop.height != matrix_in_prop.height || this->matrix_prop.height != matrix_in_prop.width)
+                throw BAD_MATRIX_SIZE_EXCEPTION;
+            for(int i = 0; i < this->matrix_prop.height; i++){
+                this->matrix[i]     = matrix_in[i];
             }
         }
 
