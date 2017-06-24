@@ -1,0 +1,19 @@
+# depslib dependency file v1.0
+1498291709 source:c:\users\tal\desktop\study\cpp_linear_algebra\tb\main.cpp
+	<iostream>
+	"../src/linear_algebra.h"
+
+1498339450 c:\users\tal\desktop\study\cpp_linear_algebra\src\linear_algebra.h
+	<vector>
+	<iostream>
+	"vector_ext.h"
+	"errors.h"
+
+1497634426 c:\users\tal\desktop\study\cpp_linear_algebra\src\vector_ext.h
+	<vector>
+	<math.h>
+	<iomanip>
+	"errors.h"
+
+1497634426 c:\users\tal\desktop\study\cpp_linear_algebra\src\errors.h
+
